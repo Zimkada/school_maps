@@ -28,10 +28,22 @@ map_bnk.fit_bounds(bounds)
 
 # Placement des collèges sur la carte
 for index, row in df.iterrows():
-    folium.Marker(location = [row['Y'], row['X']],
-                  tooltip=row['NOM'],
-                  icon=folium.Icon(icon='user-graduate', prefix='fa')).add_to((map_bnk))
+    # Marqueur avec icône en forme de goutte d'eau
+    folium.Marker(
+        location=[row['Y'], row['X']],
+        tooltip=row['NOM'],
+        icon=folium.Icon(icon='user-graduate', prefix='fa')
+    ).add_to(map_bnk)
     
+    # Label avec les effectifs et le nom du collège
+    folium.Marker(
+        location=[row['Y'], row['X']],
+        icon=folium.DivIcon(
+            html=f'<div style = "font-family: Arial, sans-serif; font-size:12px; front-weight = bold; front-style = italic; color: red; background-color: gray; opacity = 0.8; text-decoration = underline; text-align: left; border: 1px solid black;"> {row["EFF"]}<br>{row["NOM"]}</div>',
+            icon_size=(150, 50)
+        )
+    ).add_to(map_bnk)
+
 
     #Création de la zone de couverture de chaque collège (rayon de 5km)
     folium.Circle(location=[row['Y'],row['X']],radius=5000, color ='blue', 
@@ -54,7 +66,7 @@ for idx, row in gdf.iterrows():
     point = row.geometry
     folium.Marker(location=[point.y, point.x],
                   tooltip = row['FID'],
-                  icon=folium.DivIcon(html='<div style="font-size:24px; color: red;">&#9679;</div>')
+                  icon=folium.DivIcon(html='<div style="font-size:24px; color: yellow;">&#9679;</div>')
                   ).add_to(map_bnk)
 
     
