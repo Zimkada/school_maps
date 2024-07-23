@@ -13,6 +13,11 @@ from geopy.distance import geodesic
 import geopandas as gpd
 import base64
 from io import BytesIO
+from ipywidgets import widgets, interact
+from IPython.display import display, HTML
+import streamlit as st
+from streamlit_folium import st_folium
+
 
 #Chargement des coordonnées géo
 
@@ -105,3 +110,24 @@ for idx, row in gdf.iterrows():
     
 #Enregistrer la carte
 map_bnk.save("Carto_Banikoara.html")
+
+# Interface Streamlit
+st.title("Carte des collèges de Banikoara et calcul de distance")
+
+# Affichage de la carte
+st_data = st_folium(map_bnk, width=700, height=500)
+
+# Ajout de la fonctionnalité de calcul de distance
+college_options = df['NOM'].tolist()
+
+depart = st.selectbox('Collège de départ:', college_options)
+arrivee = st.selectbox('Collège d\'arrivée:', college_options)
+
+if st.button('Calculer la distance'):
+    if depart and arrivee:
+        coord_depart = df[df['NOM'] == depart][['Y', 'X']].values[0]
+        coord_arrivee = df[df['NOM'] == arrivee][['Y', 'X']].values[0]
+        distance = geodesic(coord_depart, coord_arrivee).km
+        st.write(f"Distance entre {depart} et {arrivee} : {distance:.2f} km")
+    else:
+        st.warning("Sélectionnez deux collèges")
