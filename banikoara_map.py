@@ -31,6 +31,16 @@ map_bnk = folium.Map(location = map_center,zoom_start = 8)#,tiles='CartoDB posit
 #Coordonnées des limites de la carte
 bounds = [[11.2500, 2.3800], [11.3500, 2.4800]]
 
+# Ajouter des tuiles Google Maps
+folium.TileLayer(
+    tiles='http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+    attr='Google',
+    name='Google Maps',
+    max_zoom=20,
+    subdomains=['mt0', 'mt1', 'mt2', 'mt3'],
+).add_to(map_bnk)
+
+
 # Définir les limites de la carte
 map_bnk.fit_bounds(bounds)
 
@@ -67,20 +77,20 @@ for index, row in df.iterrows():
     folium.Marker(
         location=[row['Y'], row['X']],
         icon=folium.DivIcon(
-            html=f'<div style = "font-family: Arial, sans-serif; font-size:12px; front-weight = bold; front-style = italic; color: red; background-color: gray; opacity = 0.8; text-decoration = underline; text-align: left; border: 1px solid black;"> {row["EFF"]}<br>{row["NOM"]}</div>',
-            icon_size=(150, 50)
+            html=f'<div style = "font-family: Arial, sans-serif; font-size:12px; front-weight = bold; front-style = italic; color: red; background-color: white; opacity = 0.8; text-decoration = underline; text-align: left; border: 1px solid black;"> {row["EFF"]}<br>{row["NOM"]}</div>',
+            icon_size=(100, 30)
         )
     ).add_to(map_bnk)
 
 
     # Graphique des effectifs
-    graph_data = create_graph(row)
-    folium.Marker(
-        location=[row['Y'], row['X']],
-        icon=folium.DivIcon(
-            html=f'<img src="{graph_data}" style="width: 100px; height: 100px;">'
-        )
-    ).add_to(map_bnk)
+#    graph_data = create_graph(row)
+#    folium.Marker(
+#        location=[row['Y'], row['X']],
+#        icon=folium.DivIcon(
+#            html=f'<img src="{graph_data}" style="width: 100px; height: 100px;">'
+#        )
+#    ).add_to(map_bnk)
 
 
     #Création de la zone de couverture de chaque collège (rayon de 5km)
